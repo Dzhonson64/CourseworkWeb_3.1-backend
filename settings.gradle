@@ -1,0 +1,5 @@
+rootProject.name = 'coursework-app'
+
+include 'model'
+include 'app'
+
