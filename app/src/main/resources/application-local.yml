@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/courseworkWeb
+    username: postgres
+    password: 123TOpero
+  jpa:
+    show-sql: false
+  liquibase:
+    drop-first: true

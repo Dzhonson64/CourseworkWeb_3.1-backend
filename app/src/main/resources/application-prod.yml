@@ -1,0 +1,6 @@
+spring:
+  liquibase:
+    drop-first: true
+  datasource:
+    password: 1234
+    url: jdbc:postgresql://localhost:5433/muse

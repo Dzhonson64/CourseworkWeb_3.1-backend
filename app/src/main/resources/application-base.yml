@@ -1,0 +1,48 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api/courseworkWeb
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/courseworkWeb
+    username: sochi #museunidayapplication100museup500pYc2!Y5Z
+    password: sochi #postgres
+  liquibase:
+    change-log: classpath:db/liquibase/db.changelog-master.xml
+    drop-first: false
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  jpa:
+    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+#        ddl-auto: createDefContur-drop
+  main:
+    allow-bean-definition-overriding: true
+
+  mail:
+    host: mail.hosting.reg.ru
+    username: info@museup.ru
+    password: 5I9j3D2a
+    port: 465
+    protocol: smtps
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+java:
+  util:
+    logging:
+      FileHandler.pattern: classpath:MyApplication_%u-%g.log
+
+saveFilePath : uploads
+
