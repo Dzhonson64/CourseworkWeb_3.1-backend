@@ -31,7 +31,7 @@ public class ProductEntity extends BaseEntity {
 
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REFRESH, orphanRemoval = true)
-    List<OrderEntity> userList = new ArrayList<>();
+    List<OrderProductEntity> userList = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REFRESH, orphanRemoval = true)
     List<FeedbackEntity> feedbackList = new ArrayList<>();
