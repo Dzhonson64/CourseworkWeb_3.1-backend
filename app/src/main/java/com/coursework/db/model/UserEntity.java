@@ -47,8 +47,6 @@ public class UserEntity extends BaseEntity {
     @Column(name = "postcode")
     String postcode;
 
-    @Column(name = "postcode")
-    String postcode
 
     @Column(name = "money")
     BigDecimal money;

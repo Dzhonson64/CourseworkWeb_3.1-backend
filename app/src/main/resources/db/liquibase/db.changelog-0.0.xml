@@ -2,13 +2,13 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
-    <changeSet author="kirillchig" id="11.10.2020-5">        <createSequence dataType="BIGINT"
+    <changeSet author="kirillchig" id="15.10.2020-0">
+        <createSequence dataType="BIGINT"
                         incrementBy="1"
                         minValue="1"
                         schemaName="public"
                         sequenceName="hibernate_sequence"
                         startValue="1"/>
-
 
         <createTable tableName="user">
             <column name="id" type="serial">
@@ -17,20 +17,17 @@
             <column name="username" type="VARCHAR(255)"/>
             <column name="enabled" type="BOOLEAN"/>
             <column name="status" type="VARCHAR(255)"/>
-            <column  name="snils" type="VARCHAR(255)" />
-            <column  name="surname" type="VARCHAR(255)" />
-            <column  name="name" type="VARCHAR(255)" />
-            <column  name="patronymic" type="VARCHAR(255)" />
-            <column  name="bucket_id" type="BIGINT">
+            <column name="snils" type="VARCHAR(255)"/>
+            <column name="surname" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="patronymic" type="VARCHAR(255)"/>
+            <column name="address_id" type="BIGINT">
                 <constraints unique="true"/>
             </column>
-            <column  name="address_id" type="BIGINT" >
-                <constraints unique="true"/>
-            </column>
-            <column  name="role_id" type="BIGINT" />
-            <column  name="phone" type="VARCHAR(255)" />
-            <column  name="postcode" type="VARCHAR(255)" />
-            <column  name="money" type="money" />
+            <column name="role_id" type="BIGINT"/>
+            <column name="phone" type="VARCHAR(255)"/>
+            <column name="postcode" type="VARCHAR(255)"/>
+            <column name="money" type="money"/>
 
             <column name="user_role_id" type="BIGINT">
                 <constraints unique="true"/>
@@ -40,6 +37,7 @@
                 <constraints unique="true"/>
             </column>
         </createTable>
+
 
         <createTable tableName="password">
             <column name="id" type="serial">
@@ -61,30 +59,32 @@
             <column name="id" type="serial">
                 <constraints primaryKey="true" primaryKeyName="address_user_pk"/>
             </column>
-            <column name="city" type="VARCHAR(255)" />
-            <column name="country" type="VARCHAR(255)" />
-            <column name="street" type="VARCHAR(255)" />
-            <column name="home" type="VARCHAR(255)" />
-            <column name="apartment" type="INT" />
-            <column name="type" type="VARCHAR(255)" />
+            <column name="city" type="VARCHAR(255)"/>
+            <column name="country" type="VARCHAR(255)"/>
+            <column name="street" type="VARCHAR(255)"/>
+            <column name="home" type="VARCHAR(255)"/>
+            <column name="apartment" type="INT"/>
+            <column name="type" type="VARCHAR(255)"/>
         </createTable>
 
-        <createTable tableName="address_provider">
+        <createTable tableName="address">
             <column name="id" type="serial">
-                <constraints primaryKey="true" primaryKeyName="address_provider_pk"/>
+                <constraints primaryKey="true" primaryKeyName="address_pk"/>
             </column>
-            <column name="city" type="VARCHAR(255)" />
-            <column name="country" type="VARCHAR(255)" />
-            <column name="street" type="VARCHAR(255)" />
-            <column name="home" type="VARCHAR(255)" />
+            <column name="city" type="VARCHAR(255)"/>
+            <column name="country" type="VARCHAR(255)"/>
+            <column name="street" type="VARCHAR(255)"/>
+            <column name="home" type="VARCHAR(255)"/>
+            <column name="apartment" type="VARCHAR(255)"/>
+            <column name="type" type="VARCHAR(255)"/>
         </createTable>
 
         <createTable tableName="feedback">
             <column name="id" type="serial">
                 <constraints primaryKey="true" primaryKeyName="feedback_pk"/>
             </column>
-            <column name="text" type="TEXT" />
-            <column name="rating" type="REAL" />
+            <column name="text" type="TEXT"/>
+            <column name="rating" type="REAL"/>
             <column name="parent_feedback_id" type="BIGINT">
                 <constraints unique="true"/>
             </column>
@@ -106,8 +106,8 @@
             <column name="product_id" type="BIGINT">
                 <constraints unique="true"/>
             </column>
-            <column name="date" type="timestamp" />
-            <column name="status" type="VARCHAR(255)" />
+            <column name="date" type="timestamp"/>
+            <column name="status" type="VARCHAR(255)"/>
         </createTable>
 
         <createTable tableName="product">
@@ -126,9 +126,9 @@
             <column name="bonus_id" type="BIGINT">
                 <constraints unique="true"/>
             </column>
-            <column name="price" type="money" />
-            <column name="image" type="bytea" />
-            <column name="description" type="TEXT" />
+            <column name="price" type="money"/>
+            <column name="image" type="bytea"/>
+            <column name="description" type="TEXT"/>
         </createTable>
 
         <createTable tableName="waybill">
@@ -141,8 +141,8 @@
             <column name="product_id" type="BIGINT">
                 <constraints unique="true"/>
             </column>
-            <column name="amount" type="INT" />
-            <column name="date_arrive" type="DATE" />
+            <column name="amount" type="INT"/>
+            <column name="date_arrive" type="DATE"/>
         </createTable>
 
         <createTable tableName="provider">
@@ -153,9 +153,9 @@
                 <constraints unique="true"/>
             </column>
             <column name="name" type="VARCHAR(255)"/>
-            <column name="phone" type="VARCHAR(255)" />
-            <column name="start_date" type="DATE" />
-            <column name="image_logo" type="BYTEA" />
+            <column name="phone" type="VARCHAR(255)"/>
+            <column name="start_date" type="DATE"/>
+            <column name="image_logo" type="BYTEA"/>
         </createTable>
 
         <createTable tableName="discount">
@@ -163,7 +163,7 @@
                 <constraints primaryKey="true" primaryKeyName="discount_pk"/>
             </column>
             <column name="name" type="VARCHAR(255)"/>
-            <column name="percent" type="INT" />
+            <column name="percent" type="INT"/>
         </createTable>
 
         <createTable tableName="bonus">
@@ -171,7 +171,7 @@
                 <constraints primaryKey="true" primaryKeyName="bonus_pk"/>
             </column>
             <column name="name" type="VARCHAR(255)"/>
-            <column name="points" type="INT" />
+            <column name="points" type="INT"/>
         </createTable>
 
         <createTable tableName="product_property">
@@ -184,7 +184,7 @@
             <column name="property_id" type="BIGINT">
                 <constraints unique="true"/>
             </column>
-            <column name="value" type="REAL" />
+            <column name="value" type="REAL"/>
         </createTable>
 
         <createTable tableName="property">
@@ -193,7 +193,7 @@
             </column>
             <column name="name" type="VARCHAR(255)"/>
             <column name="unit" type="VARCHAR(255)"/>
-            <column name="description" type="TEXT" />
+            <column name="description" type="TEXT"/>
         </createTable>
 
         <createTable tableName="type_property">
@@ -206,7 +206,7 @@
             <column name="property_id" type="BIGINT">
                 <constraints unique="true"/>
             </column>
-            <column name="description" type="TEXT" />
+            <column name="description" type="TEXT"/>
         </createTable>
 
         <createTable tableName="type_product">
@@ -217,7 +217,7 @@
                 <constraints unique="true"/>
             </column>
             <column name="property_id" type="VARCHAR(255)"/>
-            <column name="description" type="TEXT" />
+            <column name="description" type="TEXT"/>
         </createTable>
 
         <addForeignKeyConstraint baseColumnNames="user_role_id"
@@ -234,8 +234,8 @@
                                  onDelete="SET NULL"
                                  onUpdate="CASCADE"
                                  referencedColumnNames="id"
-                                 referencedTableName="address_user"
-                                 constraintName="fk_address_user__users"
+                                 referencedTableName="address"
+                                 constraintName="fk_address__users"
         />
 
         <addForeignKeyConstraint baseColumnNames="password_id"
@@ -346,8 +346,8 @@
                                  onDelete="CASCADE"
                                  onUpdate="CASCADE"
                                  referencedColumnNames="id"
-                                 referencedTableName="address_provider"
-                                 constraintName="fk_address_provider__provider"
+                                 referencedTableName="address"
+                                 constraintName="fk_address__provider"
         />
 
         <addForeignKeyConstraint baseColumnNames="product_id"
@@ -397,7 +397,6 @@
         />
 
     </changeSet>
-
 
 
 </databaseChangeLog>

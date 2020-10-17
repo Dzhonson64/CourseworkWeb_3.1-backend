@@ -22,6 +22,6 @@ public class BonusEntity extends BaseEntity {
     @Column(name = "points")
     Integer points;
 
-    @OneToMany(mappedBy = "bounus", cascade = CascadeType.REFRESH, orphanRemoval = true)
+    @OneToMany(mappedBy = "bonus", cascade = CascadeType.REFRESH, orphanRemoval = true)
     List<ProductEntity> productList = new ArrayList<>();
 }

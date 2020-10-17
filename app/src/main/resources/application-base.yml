@@ -7,8 +7,8 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/courseworkWeb
-    username: sochi #museunidayapplication100museup500pYc2!Y5Z
-    password: sochi #postgres
+    username: postgres #museunidayapplication100museup500pYc2!Y5Z
+    password: 123TOpero #postgres
   liquibase:
     change-log: classpath:db/liquibase/db.changelog-master.xml
     drop-first: false

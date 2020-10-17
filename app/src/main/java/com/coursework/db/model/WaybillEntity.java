@@ -21,7 +21,8 @@ public class WaybillEntity extends BaseEntity {
     @Column(name = "date_arrive")
     LocalDate dateArrive;
 
-
+    @ManyToOne
+    @JoinColumn(name = "provider_id")
     ProviderEntity provider;
 
     @ManyToOne

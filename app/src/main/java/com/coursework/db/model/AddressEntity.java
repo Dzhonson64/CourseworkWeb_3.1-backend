@@ -5,6 +5,7 @@ import com.coursework.db.model.type.TypeAddress;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.context.annotation.Bean;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,7 +17,6 @@ import java.util.List;
 @Table(name = "address")
 @NoArgsConstructor
 public class AddressEntity extends BaseEntity {
-
     @Column(name = "city")
     String city;
 
@@ -36,7 +36,10 @@ public class AddressEntity extends BaseEntity {
     @Column(name = "type")
     TypeAddress type;
 
-    @OneToMany(mappedBy = "role", cascade = CascadeType.REFRESH, orphanRemoval = true)
+    @OneToMany(mappedBy = "address", cascade = CascadeType.REFRESH, orphanRemoval = true)
     List<UserEntity> userList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<ProviderEntity> addressList = new ArrayList<>();
 
 }

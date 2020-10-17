@@ -23,7 +23,7 @@ public class FeedbackEntity extends BaseEntity {
     Double rating;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "parent_feedback_id")
     FeedbackEntity parentFeedback;
 
     @OneToMany(mappedBy = "parentFeedback", cascade = CascadeType.ALL, orphanRemoval = true)

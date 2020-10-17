@@ -39,6 +39,9 @@ public class ProductEntity extends BaseEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.REFRESH, orphanRemoval = true)
     List<WaybillEntity> waybillList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<ProductPropertyEntity> productPropertyList = new ArrayList<>();
+
 
     @ManyToOne
     @JoinColumn(name = "type_id")

@@ -6,9 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,10 +23,16 @@ public class ProviderEntity extends BaseEntity {
     String phone;
 
     @Column(name = "start_date")
-    String phone;
+    String startDate;
 
-    @Column(name = "start_date")
-    byte[] image_logo;
+    @Column(name = "image_logo")
+    byte[] imageLogo;
 
+    @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<WaybillEntity> waybillList = new ArrayList<>();
+
+
+    @ManyToOne
+    @JoinColumn(name = "address_id", nullable = false)
     AddressEntity address;
 }

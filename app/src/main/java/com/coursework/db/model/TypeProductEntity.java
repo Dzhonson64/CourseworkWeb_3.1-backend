@@ -22,6 +22,14 @@ public class TypeProductEntity extends BaseEntity {
     @OneToMany(mappedBy = "typeProduct", cascade = CascadeType.ALL, orphanRemoval = true)
     List<ProductEntity> productList = new ArrayList<>();
 
-
+    @ManyToOne
+    @JoinColumn(name = "type_product", nullable = false)
     TypeProductEntity typeProduct;
+
+    @OneToMany(mappedBy = "typeProduct", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<TypeProductEntity> typeProductList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "typeProductProperty", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<TypePropertyEntity> typePropertyList = new ArrayList<>();
+
 }

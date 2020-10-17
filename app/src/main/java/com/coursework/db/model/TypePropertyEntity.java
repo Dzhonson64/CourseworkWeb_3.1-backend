@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -16,7 +14,12 @@ import javax.persistence.Table;
 @NoArgsConstructor
 public class TypePropertyEntity extends BaseEntity {
 
+    @ManyToOne
+    @JoinColumn(name = "type_id", nullable = false)
     TypeProductEntity typeProductProperty;
+
+    @ManyToOne
+    @JoinColumn(name = "type_property", nullable = false)
     PropertyProductEntity propertyProduct;
 
     @Column(name = "description")
