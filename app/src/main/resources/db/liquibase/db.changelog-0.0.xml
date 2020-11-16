@@ -2,17 +2,18 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
-    <changeSet author="kirillchig" id="17.10.2020-0">        <createSequence dataType="BIGINT"
+    <changeSet author="kirillchig" id="7.09.2020-1">        <createSequence dataType="BIGINT"
                         incrementBy="1"
                         minValue="1"
                         schemaName="public"
                         sequenceName="hibernate_sequence"
                         startValue="1"/>
 
-        <createTable tableName="user">
+        <createTable tableName="usr">
             <column name="id" type="serial">
                 <constraints primaryKey="true" primaryKeyName="user_pk"/>
             </column>
+            <column name="google_id" type="VARCHAR(255)" />
             <column name="username" type="VARCHAR(255)"/>
             <column name="enabled" type="BOOLEAN"/>
             <column name="status" type="VARCHAR(255)"/>
@@ -233,7 +234,7 @@
         </createTable>
 
         <addForeignKeyConstraint baseColumnNames="user_role_id"
-                                 baseTableName="user"
+                                 baseTableName="usr"
                                  onDelete="CASCADE"
                                  onUpdate="RESTRICT"
                                  referencedColumnNames="id"
@@ -242,7 +243,7 @@
         />
 
         <addForeignKeyConstraint baseColumnNames="address_id"
-                                 baseTableName="user"
+                                 baseTableName="usr"
                                  onDelete="SET NULL"
                                  onUpdate="CASCADE"
                                  referencedColumnNames="id"
@@ -251,7 +252,7 @@
         />
 
         <addForeignKeyConstraint baseColumnNames="password_id"
-                                 baseTableName="user"
+                                 baseTableName="usr"
                                  onDelete="CASCADE"
                                  onUpdate="CASCADE"
                                  referencedColumnNames="id"
@@ -265,7 +266,7 @@
                                  onDelete="SET NULL"
                                  onUpdate="CASCADE"
                                  referencedColumnNames="id"
-                                 referencedTableName="user"
+                                 referencedTableName="usr"
                                  constraintName="fk_user__order"
         />
 
@@ -292,7 +293,7 @@
                                  onDelete="SET NULL"
                                  onUpdate="CASCADE"
                                  referencedColumnNames="id"
-                                 referencedTableName="user"
+                                 referencedTableName="usr"
                                  constraintName="fk_user__feedback"
         />
 

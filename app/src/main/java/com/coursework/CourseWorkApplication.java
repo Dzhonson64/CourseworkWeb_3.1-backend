@@ -11,8 +11,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @EnableFeignClients
 public class CourseWorkApplication {
-
-
 	public static void main(String[] args) {
 		SpringApplication.run(CourseWorkApplication.class, args);
 	}

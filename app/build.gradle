@@ -69,4 +69,7 @@ dependencies {
     compile group: 'com.auth0', name: 'java-jwt', version: '3.10.3'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
 
+    compile('org.springframework.boot:spring-boot-starter-security')
+    compile('org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.0.RELEASE')
+
 }
