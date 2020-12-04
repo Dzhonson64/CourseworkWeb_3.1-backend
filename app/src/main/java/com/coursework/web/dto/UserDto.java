@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@Schema(name = "User", description = "Объект пользователя")
+@Schema(name = "Пользователь", description = "Объект пользователя")
 public class UserDto {
     String googleId;
     String username;

@@ -1,5 +1,6 @@
 package com.coursework.web.controller;
 
+import com.coursework.web.dto.AddressDto;
 import com.coursework.web.dto.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,6 +14,14 @@ import java.util.List;
 public class UserController {
 
     @Operation(summary = "Сохранение списка копирайтов")
+    @GetMapping()
+    @ResponseBody
+    public List<UserDto> getUser(){
+        System.out.println(21);
+        return null;
+    }
+
+    @Operation(summary = "Сохранение списка копирайтов")
     @PostMapping("/add")
     @ResponseBody
     public List<UserDto> save(@RequestBody List<UserDto> user){
@@ -20,11 +29,13 @@ public class UserController {
         return null;
     }
 
+
+
     @Operation(summary = "Сохранение списка копирайтов")
-    @GetMapping()
+    @PostMapping("/address")
     @ResponseBody
-    public List<UserDto> getUser(){
-        System.out.println(21);
+    public List<UserDto> saveAddress(@RequestBody AddressDto address){
+        System.out.println(address);
         return null;
     }
 }

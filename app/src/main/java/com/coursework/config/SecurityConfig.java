@@ -68,7 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             ).permitAll()
             /*end swagger*/
 
-            .antMatchers(" /api/courseworkWeb/user", "/user")
+            .antMatchers(" /api/courseworkWeb/user", "/user/**")
             .permitAll()
             /*end DEV mode*/
             //.anyRequest().authenticated()
