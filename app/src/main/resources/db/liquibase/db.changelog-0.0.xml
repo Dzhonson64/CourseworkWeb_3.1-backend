@@ -213,11 +213,11 @@
             <column name="id" type="serial">
                 <constraints primaryKey="true" primaryKeyName="type_product_pk"/>
             </column>
-            <column name="type_id" type="BIGINT">
-                <constraints unique="true"/>
+            <column name="parent_id" type="BIGINT">
             </column>
             <column name="property_id" type="VARCHAR(255)"/>
-            <column name="description" type="TEXT" />
+            <column name="name" type="VARCHAR(255)" />
+            <column name="type" type="VARCHAR(255)" />
         </createTable>
 
         <createTable tableName="order_product">
@@ -391,7 +391,7 @@
                                  constraintName="fk_property__product_property"
         />
 
-        <addForeignKeyConstraint baseColumnNames="type_id"
+        <addForeignKeyConstraint baseColumnNames="parent_id"
                                  baseTableName="type_product"
                                  onDelete="CASCADE"
                                  onUpdate="CASCADE"
@@ -400,14 +400,7 @@
                                  constraintName="fk_type_product__type_product"
         />
 
-        <addForeignKeyConstraint baseColumnNames="type_id"
-                                 baseTableName="type_property"
-                                 onDelete="CASCADE"
-                                 onUpdate="CASCADE"
-                                 referencedColumnNames="id"
-                                 referencedTableName="type_product"
-                                 constraintName="fk_type_product__type_property"
-        />
+
 
         <addForeignKeyConstraint baseColumnNames="property_id"
                                  baseTableName="type_property"
