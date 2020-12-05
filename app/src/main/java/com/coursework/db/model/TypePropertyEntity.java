@@ -19,7 +19,7 @@ public class TypePropertyEntity extends BaseEntity {
     TypeProductEntity typeProductProperty;
 
     @ManyToOne
-    @JoinColumn(name = "type_property", nullable = false)
+    @JoinColumn(name = "property_id", nullable = false)
     PropertyProductEntity propertyProduct;
 
     @Column(name = "description")

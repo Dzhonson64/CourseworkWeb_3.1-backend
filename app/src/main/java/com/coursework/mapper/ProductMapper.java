@@ -31,4 +31,7 @@ public interface ProductMapper {
     CatalogDto toTypeProductDto(TypeProductEntity source);
 
     List<CatalogDto> toTypeProductListDto(List<TypeProductEntity> source);
+
+
+    TypeProductEntity typeProductEntityToTypeProductEntity(TypeProductEntity source);
 }

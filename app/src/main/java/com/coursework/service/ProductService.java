@@ -34,14 +34,19 @@ public class ProductService {
 
     private boolean saveChildren(TypeProductEntity parent, List<TypeProductEntity> childList) {
         for (int i = 0; i < childList.size(); i++) {
-            childList.get(i).setParentTypeProduct(parent);
+            TypeProductEntity entity = childList.get(i);
+            if (Objects.nonNull(entity.getId()) && typeProductRepo.findById(entity.getId()).isPresent()) {
+                TypeProductEntity entityFromDB = typeProductRepo.findById(entity.getId()).get();
+                entity = ProductMapper.MAPPER.typeProductEntityToTypeProductEntity(entityFromDB);
+            }
+            entity.setParentTypeProduct(parent);
             try {
-                TypeProductEntity ty = typeProductRepo.save(childList.get(i));
+                typeProductRepo.save(entity);
             } catch (Exception e) {
                 return false;
             }
 
-            saveChildren(childList.get(i), childList.get(i).getTypeProductList());
+            saveChildren(entity, entity.getTypeProductList());
         }
         return true;
     }

@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8085
   servlet:
     context-path: /api/courseworkWeb
 
@@ -11,7 +11,7 @@ spring:
     password: 123TOpero #postgres
   liquibase:
     change-log: classpath:db/liquibase/db.changelog-master.xml
-    drop-first: true
+    drop-first: false
   servlet:
     multipart:
       max-file-size: 100MB

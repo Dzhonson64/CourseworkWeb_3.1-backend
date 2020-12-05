@@ -32,6 +32,7 @@ public class TypeProductEntity extends BaseEntity {
     @JoinColumn(name = "parent_id", nullable = false)
     TypeProductEntity parentTypeProduct;
 
+
     @OneToMany(mappedBy = "parentTypeProduct", cascade = CascadeType.ALL, orphanRemoval = true)
     List<TypeProductEntity> typeProductList = new ArrayList<>();
 
