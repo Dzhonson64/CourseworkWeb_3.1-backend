@@ -39,7 +39,7 @@ public class ProductService {
 
     private boolean saveChildren(List<TypeProductEntity> childList) {
         List<TypeProductEntity> childFilteredList = childList.stream()
-                .filter(typeProductEntity -> typeProductEntity.getStatusActiveType() == StatusActiveType.ENABLE).collect(Collectors.toList());
+                .filter(typeProductEntity -> typeProductEntity.getStatusActiveType() == StatusActiveType.ENABLE &&  !typeProductEntity.getName().isEmpty()).collect(Collectors.toList());
         childList.clear();
         childList.addAll(childFilteredList);
         for (int i = 0; i < childList.size(); i++) {
