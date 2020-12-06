@@ -1,16 +1,20 @@
 package com.coursework.web.dto;
 
 import com.coursework.web.dto.type.CatalogType;
+import com.coursework.web.dto.type.StatusActiveType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
 @Schema(name = "Дерево каталога", description = "")
 public class CatalogDto {
     private Long id;
-    private CatalogDto[] children;
+    private List<CatalogDto> children;
     private String value;
-    private CatalogType status;
+    private CatalogType type;
+    private StatusActiveType status;
 }

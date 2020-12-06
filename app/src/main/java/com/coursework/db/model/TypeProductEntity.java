@@ -1,11 +1,13 @@
 package com.coursework.db.model;
 
 import com.coursework.db.model.base.BaseEntity;
-import com.coursework.web.dto.CatalogDto;
 import com.coursework.web.dto.type.CatalogType;
+import com.coursework.web.dto.type.StatusActiveType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+import org.springframework.data.annotation.Transient;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -19,24 +21,27 @@ import java.util.List;
 public class TypeProductEntity extends BaseEntity {
 
     @Column(name = "name")
-    String name;
+    private String name;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
     private CatalogType type;
 
     @OneToMany(mappedBy = "typeProduct", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<ProductEntity> productList = new ArrayList<>();
+    private  List<ProductEntity> productList = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "parent_id", nullable = false)
-    TypeProductEntity parentTypeProduct;
+    private TypeProductEntity parentTypeProduct;
 
-
-    @OneToMany(mappedBy = "parentTypeProduct", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<TypeProductEntity> typeProductList = new ArrayList<>();
+    @OneToMany(mappedBy = "parentTypeProduct", cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval = true)
+    private List<TypeProductEntity> typeProductList = new ArrayList<>();
 
     @OneToMany(mappedBy = "typeProductProperty", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<TypePropertyEntity> typePropertyList = new ArrayList<>();
+    private List<TypePropertyEntity> typePropertyList = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private StatusActiveType statusActiveType;
 
 }

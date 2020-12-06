@@ -30,4 +30,11 @@ public class ProductController {
     public List<CatalogDto> getCatalog(){
         return ProductMapper.MAPPER.toTypeProductListDto(productService.getCatalogList());
     }
+
+    @Operation(summary = "Получения дерева каталога")
+    @GetMapping("/catalog/last")
+    @ResponseBody
+    public List<CatalogDto> getCatalogLast(){
+        return ProductMapper.MAPPER.toTypeProductListDto(productService.getCatalogLast());
+    }
 }
