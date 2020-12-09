@@ -57,4 +57,11 @@ public class ProductController {
     public List<PropertyProductsDto> getProperties(){
         return productPropertyService.getPropertyProduct();
     }
+
+    @Operation(summary = "Удаление свойств товаров")
+    @DeleteMapping("/properties/{id}")
+    @ResponseBody
+    public Boolean deleteProperties(@PathVariable("id") Long id){
+        return productPropertyService.deleteProduct(id);
+    }
 }

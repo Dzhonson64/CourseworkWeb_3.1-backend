@@ -53,4 +53,9 @@ public class ProductPropertyService {
         }
         return productsDtos;
     }
+
+    public Boolean deleteProduct(Long id) {
+        propertyProductRepo.deleteById(id);
+        return true;
+    }
 }
