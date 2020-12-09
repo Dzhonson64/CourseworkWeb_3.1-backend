@@ -135,12 +135,8 @@
             <column name="id" type="serial">
                 <constraints primaryKey="true" primaryKeyName="waybill_pk"/>
             </column>
-            <column name="provider_id" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
-            <column name="product_id" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
+            <column name="provider_id" type="BIGINT"/>
+            <column name="product_id" type="BIGINT"></column>
             <column name="amount" type="INT" />
             <column name="date_arrive" type="DATE" />
         </createTable>
@@ -178,12 +174,8 @@
             <column name="id" type="serial">
                 <constraints primaryKey="true" primaryKeyName="product_property_pk"/>
             </column>
-            <column name="product_id" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
-            <column name="property_id" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
+            <column name="product_id" type="BIGINT"/>
+            <column name="property_id" type="BIGINT"/>
             <column name="value" type="REAL" />
         </createTable>
 
@@ -200,12 +192,8 @@
             <column name="id" type="serial">
                 <constraints primaryKey="true" primaryKeyName="type_property_pk"/>
             </column>
-            <column name="type_id" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
-            <column name="property_id" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
+            <column name="type_id" type="BIGINT"/>
+            <column name="property_id" type="BIGINT"/>
             <column name="description" type="TEXT" />
 
         </createTable>
@@ -226,12 +214,8 @@
             <column name="id" type="serial">
                 <constraints primaryKey="true" primaryKeyName="order_product_pk"/>
             </column>
-            <column name="product_id" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
-            <column name="order_id" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
+            <column name="product_id" type="BIGINT"/>
+            <column name="order_id" type="BIGINT"/>
             <column name="amount" type="INT" />
         </createTable>
 
