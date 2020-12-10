@@ -13,8 +13,8 @@ import java.util.List;
 
 @Repository
 public interface TypeProductRepo extends JpaRepository<TypeProductEntity, Long> {
-    List<TypeProductEntity> findAllByType(CatalogType type);
-    List<TypeProductEntity> findAllByStatusActiveType(StatusActiveType status);
+    List<TypeProductEntity> findAllByTypeAndStatus(CatalogType type, StatusActiveType status);
+    List<TypeProductEntity> findAllByStatus(StatusActiveType status);
     List<TypeProductEntity> findAllByTypeProductList(List<TypeProductEntity> list);
 
     @Query(value = "DELETE FROM public.type_product t WHERE t.status = 'UNABLE'", nativeQuery = true)

@@ -48,7 +48,7 @@ public class ProductController {
     @PostMapping("/catalog")
     @ResponseBody
     public boolean saveCatalog(@RequestBody List<CatalogDto> catalogDto){
-        return productService.saveCatalogList(ProductMapper.MAPPER.toTypeProductListEntity(catalogDto));
+        return productService.saveCatalogList(catalogDto);
     }
 
     @Operation(summary = "Получения дерева каталога")

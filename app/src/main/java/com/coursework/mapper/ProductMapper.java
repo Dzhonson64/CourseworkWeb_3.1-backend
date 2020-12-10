@@ -23,15 +23,17 @@ public interface ProductMapper {
 //    List<ProductEntity> toProductListEntity(List<CatalogDto> source);
 
     @Mapping(target = "typeProductList", source = "source.children")
-    @Mapping(target = "name", source = "source.value")
-    @Mapping(target = "statusActiveType", source = "source.status")
+    @Mapping(target = "value", source = "source.value")
+    @Mapping(target = "status", source = "source.status")
+    @Mapping(target = "productList", ignore = true)
+    @Mapping(target = "typePropertyList", ignore = true)
     TypeProductEntity toTypeProductEntity(CatalogDto source);
 
     List<TypeProductEntity> toTypeProductListEntity(List<CatalogDto> source);
 
     @Mapping(target = "children", source = "source.typeProductList")
-    @Mapping(target = "value", source = "source.name")
-
+    @Mapping(target = "value", source = "source.value")
+    @Mapping(target = "status", source = "source.status")
     CatalogDto toTypeProductDto(TypeProductEntity source);
 
     List<CatalogDto> toTypeProductListDto(List<TypeProductEntity> source);

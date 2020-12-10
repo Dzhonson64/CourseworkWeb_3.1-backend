@@ -21,7 +21,7 @@ import java.util.List;
 public class TypeProductEntity extends BaseEntity {
 
     @Column(name = "name")
-    private String name;
+    private String value;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
@@ -33,8 +33,15 @@ public class TypeProductEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "parent_id", nullable = false)
     private TypeProductEntity parentTypeProduct;
-
-    @OneToMany(mappedBy = "parentTypeProduct", cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval = true)
+@Cascade({
+        org.hibernate.annotations.CascadeType.DELETE,
+        org.hibernate.annotations.CascadeType.MERGE,
+        org.hibernate.annotations.CascadeType.REFRESH,
+        org.hibernate.annotations.CascadeType.REPLICATE,
+        org.hibernate.annotations.CascadeType.REMOVE,
+        org.hibernate.annotations.CascadeType.DETACH
+})
+    @OneToMany(mappedBy = "parentTypeProduct", fetch=FetchType.EAGER, orphanRemoval = true)
     private List<TypeProductEntity> typeProductList = new ArrayList<>();
 
     @OneToMany(mappedBy = "typeProductProperty", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -42,6 +49,6 @@ public class TypeProductEntity extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private StatusActiveType statusActiveType;
+    private StatusActiveType status;
 
 }
