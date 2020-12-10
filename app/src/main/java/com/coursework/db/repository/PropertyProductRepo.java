@@ -17,4 +17,13 @@ public interface PropertyProductRepo extends JpaRepository<PropertyProductEntity
             " p.id = p2.property_id " +
             " WHERE p.id  = :id ", nativeQuery = true)
     Long getCatalogId(@Param("id") Long id);
+
+    @Query(value = "SELECT * " +
+            " FROM public.property " +
+            " WHERE id in (SELECT p2.property_id " +
+            "            FROM type_product p " +
+            "            INNER JOIN  type_property p2 ON " +
+            "             p.id = p2.type_id " +
+            "             WHERE p.id  = :id) ", nativeQuery = true)
+    List<PropertyProductEntity> getPropertyListByCatalog(@Param("id") Long id);
 }

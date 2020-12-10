@@ -1,10 +1,11 @@
 package com.coursework.web.controller;
 
 import com.coursework.mapper.ProductMapper;
-import com.coursework.mapper.ProductPropertyMapper;
 import com.coursework.service.ProductPropertyService;
 import com.coursework.service.ProductService;
 import com.coursework.web.dto.CatalogDto;
+import com.coursework.web.dto.ProductDto;
+import com.coursework.web.dto.ProductPropertyDto;
 import com.coursework.web.dto.PropertyProductsDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,6 +21,28 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
     private final ProductPropertyService productPropertyService;
+
+    @Operation(summary = "Сохранение дерева каталога")
+    @PostMapping("")
+    @ResponseBody
+    public ProductDto saveProduct(@RequestBody ProductDto productDto){
+        return productService.saveProduct(productDto);
+    }
+
+
+    @Operation(summary = "Сохранение дерева каталога")
+    @GetMapping("")
+    @ResponseBody
+    public List<ProductDto> getProducts(){
+        return productService.getProductList();
+    }
+
+    @Operation(summary = "Сохранение значений свойтств")
+    @PostMapping("/product-property")
+    @ResponseBody
+    public boolean saveProductProperty(@RequestBody List<ProductPropertyDto> productPropertyList){
+        return productService.saveProductProperty(productPropertyList);
+    }
 
     @Operation(summary = "Сохранение дерева каталога")
     @PostMapping("/catalog")
@@ -63,5 +86,12 @@ public class ProductController {
     @ResponseBody
     public Boolean deleteProperties(@PathVariable("id") Long id){
         return productPropertyService.deleteProduct(id);
+    }
+
+    @Operation(summary = "Удаление свойств товаров")
+    @GetMapping("/properties/catalog/{id}")
+    @ResponseBody
+    public List<PropertyProductsDto> getPropertyProductByCatalog(@PathVariable("id") Long id){
+        return productPropertyService.getPropertyProductByCatalog(id);
     }
 }

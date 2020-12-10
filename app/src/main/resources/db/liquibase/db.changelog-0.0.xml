@@ -115,7 +115,6 @@
                 <constraints primaryKey="true" primaryKeyName="product_pk"/>
             </column>
             <column name="name" type="VARCHAR(255)">
-                <constraints unique="true"/>
             </column>
             <column name="type_id" type="BIGINT">
                 <constraints unique="true"/>

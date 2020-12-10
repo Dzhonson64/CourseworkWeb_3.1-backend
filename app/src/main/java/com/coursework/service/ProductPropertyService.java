@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -27,6 +28,7 @@ public class ProductPropertyService {
     public boolean savePropertyProduct(List<PropertyProductsDto> propertyProductsList) {
         for (PropertyProductsDto propertyProducts : propertyProductsList) {
             if (Objects.isNull(propertyProducts.getId())) {
+                typeProductRepo.findAll();
                 TypeProductEntity typeProductEntity = typeProductRepo.findById(propertyProducts.getCatalogId()).get();
                 TypePropertyEntity typePropertyEntity = new TypePropertyEntity();
                 typePropertyEntity.setTypeProductProperty(typeProductEntity);
@@ -52,6 +54,11 @@ public class ProductPropertyService {
             dto.setCatalogId(propertyProductRepo.getCatalogId(dto.getId()));
         }
         return productsDtos;
+    }
+
+    public List<PropertyProductsDto> getPropertyProductByCatalog(Long catalogId){
+        List<PropertyProductEntity> propertyList = propertyProductRepo.getPropertyListByCatalog(catalogId);
+       return ProductPropertyMapper.MAPPER.toListDto(propertyList);
     }
 
     public Boolean deleteProduct(Long id) {
