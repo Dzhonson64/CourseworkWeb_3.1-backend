@@ -16,9 +16,11 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "user")
+@Table(name = "usr")
 @NoArgsConstructor
-public class UserEntity extends BaseEntity {
+public class UserEntity extends BaseEntity{
+    @Column(name = "google_id")
+    String googleId;
 
     @Column(name = "username")
     String username;

@@ -2,17 +2,18 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
-    <changeSet author="kirillchig" id="17.10.2020-0">        <createSequence dataType="BIGINT"
+    <changeSet author="kirillchig" id="7.09.2020-1">        <createSequence dataType="BIGINT"
                         incrementBy="1"
                         minValue="1"
                         schemaName="public"
                         sequenceName="hibernate_sequence"
                         startValue="1"/>
 
-        <createTable tableName="user">
+        <createTable tableName="usr">
             <column name="id" type="serial">
                 <constraints primaryKey="true" primaryKeyName="user_pk"/>
             </column>
+            <column name="google_id" type="VARCHAR(255)" />
             <column name="username" type="VARCHAR(255)"/>
             <column name="enabled" type="BOOLEAN"/>
             <column name="status" type="VARCHAR(255)"/>
@@ -114,11 +115,8 @@
                 <constraints primaryKey="true" primaryKeyName="product_pk"/>
             </column>
             <column name="name" type="VARCHAR(255)">
-                <constraints unique="true"/>
             </column>
-            <column name="type_id" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
+            <column name="type_id" type="BIGINT"/>
             <column name="discount_id" type="BIGINT">
                 <constraints unique="true"/>
             </column>
@@ -134,12 +132,8 @@
             <column name="id" type="serial">
                 <constraints primaryKey="true" primaryKeyName="waybill_pk"/>
             </column>
-            <column name="provider_id" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
-            <column name="product_id" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
+            <column name="provider_id" type="BIGINT"/>
+            <column name="product_id" type="BIGINT"></column>
             <column name="amount" type="INT" />
             <column name="date_arrive" type="DATE" />
         </createTable>
@@ -177,12 +171,8 @@
             <column name="id" type="serial">
                 <constraints primaryKey="true" primaryKeyName="product_property_pk"/>
             </column>
-            <column name="product_id" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
-            <column name="property_id" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
+            <column name="product_id" type="BIGINT"/>
+            <column name="property_id" type="BIGINT"/>
             <column name="value" type="REAL" />
         </createTable>
 
@@ -199,41 +189,35 @@
             <column name="id" type="serial">
                 <constraints primaryKey="true" primaryKeyName="type_property_pk"/>
             </column>
-            <column name="type_id" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
-            <column name="property_id" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
+            <column name="type_id" type="BIGINT"/>
+            <column name="property_id" type="BIGINT"/>
             <column name="description" type="TEXT" />
+
         </createTable>
 
         <createTable tableName="type_product">
             <column name="id" type="serial">
                 <constraints primaryKey="true" primaryKeyName="type_product_pk"/>
             </column>
-            <column name="type_id" type="BIGINT">
-                <constraints unique="true"/>
+            <column name="parent_id" type="BIGINT">
             </column>
             <column name="property_id" type="VARCHAR(255)"/>
-            <column name="description" type="TEXT" />
+            <column name="name" type="VARCHAR(255)" />
+            <column name="type" type="VARCHAR(255)" />
+            <column name="status" type="VARCHAR(255)" />
         </createTable>
 
         <createTable tableName="order_product">
             <column name="id" type="serial">
                 <constraints primaryKey="true" primaryKeyName="order_product_pk"/>
             </column>
-            <column name="product_id" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
-            <column name="order_id" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
+            <column name="product_id" type="BIGINT"/>
+            <column name="order_id" type="BIGINT"/>
             <column name="amount" type="INT" />
         </createTable>
 
         <addForeignKeyConstraint baseColumnNames="user_role_id"
-                                 baseTableName="user"
+                                 baseTableName="usr"
                                  onDelete="CASCADE"
                                  onUpdate="RESTRICT"
                                  referencedColumnNames="id"
@@ -242,7 +226,7 @@
         />
 
         <addForeignKeyConstraint baseColumnNames="address_id"
-                                 baseTableName="user"
+                                 baseTableName="usr"
                                  onDelete="SET NULL"
                                  onUpdate="CASCADE"
                                  referencedColumnNames="id"
@@ -251,7 +235,7 @@
         />
 
         <addForeignKeyConstraint baseColumnNames="password_id"
-                                 baseTableName="user"
+                                 baseTableName="usr"
                                  onDelete="CASCADE"
                                  onUpdate="CASCADE"
                                  referencedColumnNames="id"
@@ -265,7 +249,7 @@
                                  onDelete="SET NULL"
                                  onUpdate="CASCADE"
                                  referencedColumnNames="id"
-                                 referencedTableName="user"
+                                 referencedTableName="usr"
                                  constraintName="fk_user__order"
         />
 
@@ -292,7 +276,7 @@
                                  onDelete="SET NULL"
                                  onUpdate="CASCADE"
                                  referencedColumnNames="id"
-                                 referencedTableName="user"
+                                 referencedTableName="usr"
                                  constraintName="fk_user__feedback"
         />
 
@@ -390,7 +374,7 @@
                                  constraintName="fk_property__product_property"
         />
 
-        <addForeignKeyConstraint baseColumnNames="type_id"
+        <addForeignKeyConstraint baseColumnNames="parent_id"
                                  baseTableName="type_product"
                                  onDelete="CASCADE"
                                  onUpdate="CASCADE"
@@ -399,14 +383,7 @@
                                  constraintName="fk_type_product__type_product"
         />
 
-        <addForeignKeyConstraint baseColumnNames="type_id"
-                                 baseTableName="type_property"
-                                 onDelete="CASCADE"
-                                 onUpdate="CASCADE"
-                                 referencedColumnNames="id"
-                                 referencedTableName="type_product"
-                                 constraintName="fk_type_product__type_property"
-        />
+
 
         <addForeignKeyConstraint baseColumnNames="property_id"
                                  baseTableName="type_property"

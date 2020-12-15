@@ -25,6 +25,8 @@ public class PropertyProductEntity extends BaseEntity {
     @Column(name = "description")
     String description;
 
+    @OneToMany(mappedBy = "propertyProduct", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<TypePropertyEntity> typePropertyList = new ArrayList<>();
 
     @OneToMany(mappedBy = "propertyProduct", cascade = CascadeType.ALL, orphanRemoval = true)
     List<ProductPropertyEntity> productPropertyList = new ArrayList<>();

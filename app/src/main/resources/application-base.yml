@@ -1,12 +1,12 @@
 server:
-  port: 8080
+  port: 8085
   servlet:
     context-path: /api/courseworkWeb
 
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/courseworkWeb
+    url: jdbc:postgresql://localhost:5432/coursework_3_1
     username: postgres #museunidayapplication100museup500pYc2!Y5Z
     password: 123TOpero #postgres
   liquibase:
@@ -46,3 +46,19 @@ java:
 
 saveFilePath : uploads
 
+
+security:
+  oauth2:
+    client:
+      clientId: 156394297884-n2squf6cqapf4e4c7e5v5dkcvjqjj57j.apps.googleusercontent.com
+      clientSecret: 9APZ--VFzcYWLB466QNhHGTf
+      accessTokenUri: https://www.googleapis.com/oauth2/v4/token
+      userAuthorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+      clientAuthenticationScheme: form
+      scope:
+        openid,
+        email,
+        profile
+    resource:
+      userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo
+      preferTokenInfo: true
