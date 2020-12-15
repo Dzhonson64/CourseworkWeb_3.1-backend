@@ -2,15 +2,15 @@ package com.coursework.service;
 
 import com.coursework.db.model.ProductEntity;
 import com.coursework.db.model.ProductPropertyEntity;
+import com.coursework.db.model.PropertyProductEntity;
 import com.coursework.db.model.TypeProductEntity;
 import com.coursework.db.repository.ProductPropertyRepo;
 import com.coursework.db.repository.ProductRepo;
 import com.coursework.db.repository.PropertyProductRepo;
 import com.coursework.db.repository.TypeProductRepo;
 import com.coursework.mapper.ProductMapper;
-import com.coursework.web.dto.CatalogDto;
-import com.coursework.web.dto.ProductDto;
-import com.coursework.web.dto.ProductPropertyDto;
+import com.coursework.mapper.ProductPropertyMapper;
+import com.coursework.web.dto.*;
 import com.coursework.web.dto.type.CatalogType;
 import com.coursework.web.dto.type.StatusActiveType;
 import lombok.AllArgsConstructor;
@@ -41,7 +41,7 @@ public class ProductService {
 
         }
         typeProductRepo.saveAll(productEntityList);
-        typeProductRepo.deleteAll(typeProductRepo.findAllByStatus(StatusActiveType.UNABLE));
+        delete();
         return true;
     }
 
@@ -75,25 +75,34 @@ public class ProductService {
     }
 
     public ProductDto saveProduct(ProductDto productDto) {
-        ProductEntity productEntity = ProductMapper.MAPPER.toProductEntity(productDto);
+        typeProductRepo.findAll();
+        ProductEntity productEntity;
+        if (Objects.isNull(productDto.getId())) {
+            productEntity = ProductMapper.MAPPER.toProductEntity(productDto);
+            productEntity.setTypeProduct(typeProductRepo.findById(productDto.getCatalogId()).get());
+        }else{
+            productEntity = productRepo.findById(productDto.getId()).get();
+        }
+
         return ProductMapper.MAPPER.toProductDto(productRepo.save(productEntity));
     }
 
     public List<ProductDto> getProductList() {
+        typeProductRepo.findAll();
         return ProductMapper.MAPPER.toProductListDto(productRepo.findAll());
     }
 
     public boolean saveProductProperty(List<ProductPropertyDto> productPropertyDto) {
-
+typeProductRepo.findAll();
         for (ProductPropertyDto propertyDto : productPropertyDto) {
             ProductPropertyEntity productPropertyEntity;
-            if (Objects.isNull(propertyDto.getId())) {
+            if (Objects.isNull(propertyDto.getProductPropertyId())) {
                 productPropertyEntity = ProductMapper.MAPPER.toProductPropertyEntity(propertyDto);
                 productPropertyEntity.setProduct(productRepo.findById(propertyDto.getProductId()).get());
                 productPropertyEntity.setPropertyProduct(propertyProductRepo.findById(propertyDto.getPropertyId()).get());
             } else {
-                productPropertyEntity = productPropertyRepo.findById(propertyDto.getId()).get();
-                BeanUtils.copyProperties(propertyDto, productPropertyEntity, "id");
+                productPropertyEntity = productPropertyRepo.findById(propertyDto.getProductPropertyId()).get();
+                productPropertyEntity.setValue( propertyDto.getValue());
             }
 
             productPropertyRepo.save(productPropertyEntity);
@@ -127,6 +136,50 @@ public class ProductService {
 
         }
         return typeProductList;
+    }
+
+    private void delete() {
+        List<TypeProductEntity> typeProductEntities = typeProductRepo.findAllByStatus(StatusActiveType.UNABLE);
+        for (TypeProductEntity typeProductEntity : typeProductEntities) {
+            propertyProductRepo.deleteAll(propertyProductRepo.getPropertyListByCatalog(typeProductEntity.getId()));
+        }
+        typeProductRepo.deleteAll(typeProductEntities);
+
+    }
+
+    @Transactional
+    public boolean deleteProduct(Long productDtoId) {
+        productRepo.delete(productDtoId);
+
+        return true;
+    }
+
+    public CatalogDto getCatalogByProductId(Long id) {
+        typeProductRepo.findAll();
+        ProductEntity productEntity = productRepo.findById(id).get();
+        return ProductMapper.MAPPER.toTypeProductDto(productEntity.getTypeProduct());
+    }
+
+    public ProductDto getProductById(Long id) {
+        typeProductRepo.findAll();
+        return ProductMapper.MAPPER.toProductDto(productRepo.findById(id).get());
+    }
+
+    public List<FillProperty> getAllPropertyProductByProduct(Long productId) {
+        typeProductRepo.findAll();
+        ProductEntity productEntity = productRepo.findById(productId).get();
+        List<FillProperty> fillProperties = new ArrayList<>();
+        for (ProductPropertyEntity p:  productEntity.getProductPropertyList()
+             ) {
+            FillProperty fillProperty = new FillProperty();
+            fillProperty.setValue(p.getValue());
+            fillProperty.setProductPropertyId(p.getId());
+            fillProperty.setName( p.getPropertyProduct().getName());
+            fillProperty.setUnit( p.getPropertyProduct().getUnit());
+            fillProperty.setPropertyId( p.getPropertyProduct().getId());
+            fillProperties.add(fillProperty);
+        }
+        return fillProperties;
     }
 
 

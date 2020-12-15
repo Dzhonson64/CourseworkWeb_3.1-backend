@@ -37,9 +37,12 @@ public class ProductPropertyService {
                 typePropertyEntity.setPropertyProduct(savedPropertyProductEntity);
                 typePropertyRepo.save(typePropertyEntity);
             }else{
-                PropertyProductEntity propertyProductEntity = propertyProductRepo.findById(propertyProducts.getId()).get();
-                BeanUtils.copyProperties(propertyProducts, propertyProductEntity, "id");
-                propertyProductRepo.save(propertyProductEntity);
+                Optional<PropertyProductEntity> propertyProductEntity = propertyProductRepo.findById(propertyProducts.getId());
+                if (propertyProductEntity.isPresent()) {
+                    BeanUtils.copyProperties(propertyProducts, propertyProductEntity, "id");
+                    propertyProductRepo.save(propertyProductEntity.get());
+                }
+
             }
 
 
@@ -50,8 +53,10 @@ public class ProductPropertyService {
     public List<PropertyProductsDto> getPropertyProduct(){
         List<PropertyProductEntity> entities = propertyProductRepo.findAll();
         List<PropertyProductsDto> productsDtos = ProductPropertyMapper.MAPPER.toListDto(entities);
+        Long id = 0L;
         for (PropertyProductsDto dto:  productsDtos){
-            dto.setCatalogId(propertyProductRepo.getCatalogId(dto.getId()));
+            id = propertyProductRepo.getCatalogId(dto.getId());
+            dto.setCatalogId(id);
         }
         return productsDtos;
     }
@@ -60,6 +65,9 @@ public class ProductPropertyService {
         List<PropertyProductEntity> propertyList = propertyProductRepo.getPropertyListByCatalog(catalogId);
        return ProductPropertyMapper.MAPPER.toListDto(propertyList);
     }
+
+
+
 
     public Boolean deleteProduct(Long id) {
         propertyProductRepo.deleteById(id);

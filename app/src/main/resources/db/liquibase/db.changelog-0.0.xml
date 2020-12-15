@@ -116,9 +116,7 @@
             </column>
             <column name="name" type="VARCHAR(255)">
             </column>
-            <column name="type_id" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
+            <column name="type_id" type="BIGINT"/>
             <column name="discount_id" type="BIGINT">
                 <constraints unique="true"/>
             </column>

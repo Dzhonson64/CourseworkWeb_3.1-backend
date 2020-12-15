@@ -3,10 +3,7 @@ package com.coursework.web.controller;
 import com.coursework.mapper.ProductMapper;
 import com.coursework.service.ProductPropertyService;
 import com.coursework.service.ProductService;
-import com.coursework.web.dto.CatalogDto;
-import com.coursework.web.dto.ProductDto;
-import com.coursework.web.dto.ProductPropertyDto;
-import com.coursework.web.dto.PropertyProductsDto;
+import com.coursework.web.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -59,6 +56,13 @@ public class ProductController {
     }
 
     @Operation(summary = "Получения дерева каталога")
+    @GetMapping("{id}/catalog")
+    @ResponseBody
+    public CatalogDto getCatalog(@PathVariable("id") Long id){
+        return productService.getCatalogByProductId(id);
+    }
+
+    @Operation(summary = "Получения дерева каталога")
     @GetMapping("/catalog/last")
     @ResponseBody
     public List<CatalogDto> getCatalogLast(){
@@ -94,4 +98,26 @@ public class ProductController {
     public List<PropertyProductsDto> getPropertyProductByCatalog(@PathVariable("id") Long id){
         return productPropertyService.getPropertyProductByCatalog(id);
     }
+
+    @Operation(summary = "Удаление свойств товаров")
+    @DeleteMapping("{id}")
+    @ResponseBody
+    public boolean getDeleteProduct(@PathVariable("id") Long id){
+        return productService.deleteProduct(id);
+    }
+
+    @Operation(summary = "Удаление свойств товаров")
+    @GetMapping("{id}/properties")
+    @ResponseBody
+    public List<FillProperty>  getAllPropertyByProduct(@PathVariable("id") Long id){
+        return productService.getAllPropertyProductByProduct(id);
+    }
+
+    @Operation(summary = "Удаление свойств товаров")
+    @GetMapping("{id}")
+    @ResponseBody
+    public ProductDto getProductById(@PathVariable("id") Long id){
+        return productService.getProductById(id);
+    }
+
 }
