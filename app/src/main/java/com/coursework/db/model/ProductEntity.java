@@ -24,7 +24,7 @@ public class ProductEntity extends BaseEntity {
     BigDecimal price;
 
     @Column(name = "image")
-    byte[] image;
+    String image;
 
     @Column(name = "description")
     String description;

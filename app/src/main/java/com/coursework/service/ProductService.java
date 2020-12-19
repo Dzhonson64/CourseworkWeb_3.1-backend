@@ -8,16 +8,24 @@ import com.coursework.db.repository.ProductPropertyRepo;
 import com.coursework.db.repository.ProductRepo;
 import com.coursework.db.repository.PropertyProductRepo;
 import com.coursework.db.repository.TypeProductRepo;
+import com.coursework.exceptions.EntityException;
+import com.coursework.exceptions.helper.ErrorCode;
 import com.coursework.mapper.ProductMapper;
 import com.coursework.mapper.ProductPropertyMapper;
+import com.coursework.storage.service.StorageException;
+import com.coursework.storage.service.StorageFileNotFoundException;
+import com.coursework.storage.service.StorageService;
 import com.coursework.web.dto.*;
 import com.coursework.web.dto.type.CatalogType;
 import com.coursework.web.dto.type.StatusActiveType;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -28,6 +36,7 @@ public class ProductService {
     private final TypeProductRepo typeProductRepo;
     private final ProductPropertyRepo productPropertyRepo;
     private final PropertyProductRepo propertyProductRepo;
+    private final StorageService storageService;
 
     @Transactional
     public boolean saveCatalogList(List<CatalogDto> catalogDto) {
@@ -180,6 +189,55 @@ typeProductRepo.findAll();
             fillProperties.add(fillProperty);
         }
         return fillProperties;
+    }
+
+    public List<ProductDto> getAllProductsByCatalog(Long catalogId) {
+        typeProductRepo.findAll();
+        TypeProductEntity typeProductEntity = typeProductRepo.findById(catalogId).get();
+        return ProductMapper.MAPPER.toProductListDto(typeProductEntity.getProductList());
+
+    }
+
+
+    public ProductDto changePhotoProject(Long id, MultipartFile file) {
+        ProductEntity projectEntity = productRepo.findById(id).orElseThrow(() -> new EntityException(ErrorCode.COMMON_OBJECT_NOT_EXISTS.toString(), "not found entity"));
+        if (projectEntity.getImage() != null) {
+            deleteImg(projectEntity.getImage());
+        }
+
+
+        String uuidOriginalFilename = getUUIDOriginalFilename(file);
+        storageService.store(file, uuidOriginalFilename);
+        projectEntity.setImage(uuidOriginalFilename);
+
+        return ProductMapper.MAPPER.toProductDto(productRepo.save(projectEntity));
+    }
+
+    public Resource getImg(Long id) {
+        ProductEntity productEntity = productRepo.findById(id).orElseThrow(() -> new EntityException(ErrorCode.COMMON_OBJECT_NOT_EXISTS.toString(), "not found entity"));
+        Resource resource = null;
+        try {
+
+        } catch (StorageException e) {
+            throw new StorageFileNotFoundException("file not found");
+        }
+        return storageService.loadAsResource(productEntity.getImage());
+    }
+
+    private void deleteImg(String imageFileName) {
+        Resource oldImageProject = storageService.loadAsResource(imageFileName);
+        try {
+            oldImageProject.getFile().delete();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String getUUIDOriginalFilename(MultipartFile file) {
+        int beginIndExpansion = Objects.requireNonNull(file.getOriginalFilename()).lastIndexOf(".");
+        String fileNewName = UUID.randomUUID().toString();
+        String fileName = file.getOriginalFilename().substring(0, beginIndExpansion);
+        return file.getOriginalFilename().replace(fileName, fileNewName);
     }
 
 

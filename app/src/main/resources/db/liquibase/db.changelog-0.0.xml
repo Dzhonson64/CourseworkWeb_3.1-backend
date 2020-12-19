@@ -124,7 +124,7 @@
                 <constraints unique="true"/>
             </column>
             <column name="price" type="money" />
-            <column name="image" type="bytea" />
+            <column name="image" type="varchar(255)" />
             <column name="description" type="TEXT" />
         </createTable>
 
