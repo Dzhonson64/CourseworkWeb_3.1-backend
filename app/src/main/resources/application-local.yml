@@ -6,7 +6,7 @@ spring:
   jpa:
     show-sql: false
   liquibase:
-    drop-first: true
+    drop-first: false
 
 
 
