@@ -8,12 +8,13 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "user_roles")
+@Table(name = "provider")
 @NoArgsConstructor
 public class ProviderEntity extends BaseEntity {
     @Column(name = "name")
@@ -22,8 +23,11 @@ public class ProviderEntity extends BaseEntity {
     @Column(name = "phone")
     String phone;
 
+    @Column(name = "password")
+    String password;
+
     @Column(name = "start_date")
-    String startDate;
+    Date startDate;
 
     @Column(name = "image_logo")
     byte[] imageLogo;

@@ -11,14 +11,16 @@ import java.math.BigDecimal;
 @Setter
 @Schema(name = "Пользователь", description = "Объект пользователя")
 public class UserDto {
-    String googleId;
-    String username;
-    String status;
-    String snils;
-    String surname;
-    String name;
-    String patronymic;
-    String phone;
-    String postcode;
-    BigDecimal money;
+    private String googleId;
+    private String nickName;
+    private String status;
+    private String snils;
+    private String surname;
+    private String name;
+    private String patronymic;
+    private String phone;
+    private String postcode;
+    private BigDecimal money;
+    private String password;
+    private AddressDto address;
 }
