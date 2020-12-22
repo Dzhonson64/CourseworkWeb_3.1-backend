@@ -93,13 +93,11 @@
             </column>
         </createTable>
 
-        <createTable tableName="order">
+        <createTable tableName="orders">
             <column name="id" type="serial">
                 <constraints primaryKey="true" primaryKeyName="order_pk"/>
             </column>
-            <column name="user_id" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
+            <column name="user_id" type="BIGINT" />
             <column name="status" type="VARCHAR(255)" />
             <column name="amount" type="INT" />
             <column name="date_time" type="TIMESTAMP" />
@@ -243,7 +241,7 @@
 
 
         <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="order"
+                                 baseTableName="orders"
                                  onDelete="SET NULL"
                                  onUpdate="CASCADE"
                                  referencedColumnNames="id"
@@ -256,7 +254,7 @@
                                  onDelete="SET NULL"
                                  onUpdate="CASCADE"
                                  referencedColumnNames="id"
-                                 referencedTableName="order"
+                                 referencedTableName="orders"
                                  constraintName="fk_order__order_product"
         />
 
@@ -406,6 +404,19 @@
         <insert tableName="role">
             <column name="name" value="ROLE_PROVIDER"/>
         </insert>
+    </changeSet>
+
+    <changeSet author="kirillchug" id="22.12.2020">
+        <addColumn tableName="usr">
+            <column name="birthday"  type="DATE"/>
+            <column name="male"  type="VARCHAR(255)"/>
+        </addColumn>
+
+    </changeSet>
+    <changeSet author="kirillchug" id="23.12.2020">
+        <addColumn tableName="usr">
+            <column name="email"  type="VARCHAR(255)"/>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

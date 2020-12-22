@@ -1,13 +1,7 @@
 package com.coursework.service;
 
-import com.coursework.db.model.ProductEntity;
-import com.coursework.db.model.ProductPropertyEntity;
-import com.coursework.db.model.PropertyProductEntity;
-import com.coursework.db.model.TypeProductEntity;
-import com.coursework.db.repository.ProductPropertyRepo;
-import com.coursework.db.repository.ProductRepo;
-import com.coursework.db.repository.PropertyProductRepo;
-import com.coursework.db.repository.TypeProductRepo;
+import com.coursework.db.model.*;
+import com.coursework.db.repository.*;
 import com.coursework.exceptions.EntityException;
 import com.coursework.exceptions.helper.ErrorCode;
 import com.coursework.mapper.ProductMapper;
@@ -26,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,8 +30,10 @@ public class ProductService {
     private final ProductRepo productRepo;
     private final TypeProductRepo typeProductRepo;
     private final ProductPropertyRepo productPropertyRepo;
+    private final ProviderRepo providerRepo;
     private final PropertyProductRepo propertyProductRepo;
     private final StorageService storageService;
+    private final WayBillRepo wayBillRepo;
 
     @Transactional
     public boolean saveCatalogList(List<CatalogDto> catalogDto) {
@@ -85,6 +82,9 @@ public class ProductService {
 
     public ProductDto saveProduct(ProductDto productDto) {
         typeProductRepo.findAll();
+        ProviderEntity providerEntity = providerRepo.findById(productDto.getProviderId()).orElse(null);
+        WaybillEntity waybillEntity = new WaybillEntity();
+
         ProductEntity productEntity;
         if (Objects.isNull(productDto.getId())) {
             productEntity = ProductMapper.MAPPER.toProductEntity(productDto);
@@ -92,8 +92,13 @@ public class ProductService {
         }else{
             productEntity = productRepo.findById(productDto.getId()).get();
         }
-
-        return ProductMapper.MAPPER.toProductDto(productRepo.save(productEntity));
+        waybillEntity.setProduct(productEntity);
+        waybillEntity.setProvider(providerEntity);
+        waybillEntity.setDateArrive(LocalDate.now());
+        providerRepo.save(providerEntity);
+        ProductDto productDto2 = ProductMapper.MAPPER.toProductDto(productRepo.save(productEntity));
+        wayBillRepo.save(waybillEntity);
+        return productDto2;
     }
 
     public List<ProductDto> getProductList() {
@@ -239,6 +244,9 @@ typeProductRepo.findAll();
         String fileName = file.getOriginalFilename().substring(0, beginIndExpansion);
         return file.getOriginalFilename().replace(fileName, fileNewName);
     }
+
+
+
 
 
 }

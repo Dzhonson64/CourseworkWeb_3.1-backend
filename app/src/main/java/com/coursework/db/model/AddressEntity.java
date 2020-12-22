@@ -1,13 +1,11 @@
 package com.coursework.db.model;
 
 import com.coursework.db.model.base.BaseEntity;
-import com.coursework.db.model.type.TypeAddress;
-import com.coursework.web.dto.AddressOptional;
+import com.coursework.db.model.type.TypeUser;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Cascade;
-import org.springframework.context.annotation.Bean;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -34,9 +32,9 @@ public class AddressEntity extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
-    private TypeAddress type;
+    private TypeUser type;
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
-    @OneToMany(mappedBy = "address", orphanRemoval = true)
+    @OneToMany(mappedBy = "address")
     private List<UserEntity> userList = new ArrayList<>();
 
     @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, orphanRemoval = true)

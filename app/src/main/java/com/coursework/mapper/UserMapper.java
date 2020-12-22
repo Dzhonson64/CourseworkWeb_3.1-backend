@@ -20,7 +20,7 @@ public interface UserMapper {
     @Mapping(target = "address.country", source = "source.address.country.name")
     @Mapping(target = "address.type", source = "source.address.type")
     @Mapping(target = "status", expression = "java(com.coursework.db.model.type.Status.ACTIVE)")
-    @Mapping(target = "username", source = "source.nickName")
+    @Mapping(target = "username", source = "source.username")
     UserEntity toEntity(UserDto source);
 
     List<UserEntity> totListEntity(List<UserDto> source);
@@ -33,7 +33,7 @@ public interface UserMapper {
     @Mapping(target = "address.country.name", source = "source.address.country")
     @Mapping(target = "address.type", source = "source.address.type")
     @Mapping(target = "address.id", source = "source.address.id")
-    @Mapping(target = "nickName", source = "source.username")
+    @Mapping(target = "username", source = "source.username")
     UserDto toDto(UserEntity source);
 
     List<UserDto> toListDto(List<UserEntity> source);

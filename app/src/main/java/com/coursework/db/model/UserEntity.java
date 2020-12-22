@@ -2,6 +2,7 @@ package com.coursework.db.model;
 
 
 import com.coursework.db.model.base.BaseEntity;
+import com.coursework.db.model.type.GenderType;
 import com.coursework.db.model.type.Status;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,7 +14,9 @@ import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -52,6 +55,12 @@ public class UserEntity extends BaseEntity {
 
     @Column(name = "postcode")
     String postcode;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "male")
+    GenderType male;
+
+    @Column(name = "birthday")
+    LocalDate birthday;
 
 
     @Column(name = "money")
@@ -74,10 +83,12 @@ public class UserEntity extends BaseEntity {
     @Column(name = "password")
     String password;
 
+    @Column(name = "email")
+    String email;
+
     @ManyToOne
     @JoinColumn(name = "address_id")
     AddressEntity address;
-
 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REFRESH, orphanRemoval = true)

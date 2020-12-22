@@ -14,4 +14,6 @@ public class ProductDto {
     private String description;
     private Long catalogId;
     private String image;
+    private Long providerId;
+
 }

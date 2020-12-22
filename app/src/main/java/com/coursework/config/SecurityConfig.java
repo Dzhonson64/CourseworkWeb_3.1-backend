@@ -2,6 +2,7 @@ package com.coursework.config;
 
 import com.coursework.security.jwt.JwtConfigurer;
 import com.coursework.security.jwt.JwtTokenProvider;
+import com.twilio.http.HttpMethod;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -61,18 +62,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .httpBasic().disable()
                 .csrf().disable()
-                //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                //.and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()
+                .antMatchers(String.valueOf(HttpMethod.POST), "/login", "register/**").permitAll()
+                .antMatchers(String.valueOf(HttpMethod.DELETE), "auth/users/*").hasRole("ADMIN")
                 .antMatchers("/v3/api-docs/**",
                         "/configuration/ui",
                         "/swagger-resources/**",
                         "/configuration/security",
                         "/swagger-ui.html",
                         "/webjars/**",
-                        "/actuator/**", "/auth/login/**", "/auth/register/**").permitAll()
+                        "/actuator/**", "/auth/login/**", "/auth/register/**", "/user/**", "/order/*/buy",
+                        "/order/user/*", "/products/**", "/auth/login/provider", "/order/product", "/auth/users", "/order/all/*",
+                        "/order/sales/*").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                //.anyRequest().authenticated()
+                .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));
     }

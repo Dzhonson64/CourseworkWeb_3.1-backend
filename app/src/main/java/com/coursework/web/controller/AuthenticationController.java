@@ -7,6 +7,7 @@ import com.coursework.security.jwt.JwtTokenProvider;
 import com.coursework.service.ProviderService;
 import com.coursework.service.UserService;
 import com.coursework.web.dto.ProviderDto;
+import com.coursework.web.dto.UserAndProvidersDto;
 import com.coursework.web.dto.UserDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -14,14 +15,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -34,19 +34,25 @@ public class AuthenticationController {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
     private final ProviderService providerService;
-    @PostMapping("login")
+    @PostMapping("/login")
     public ResponseEntity login(@RequestBody  UserDto userDto) {
         try {
-            String username = userDto.getNickName();
-            authenticationManagerBean.authenticate(new UsernamePasswordAuthenticationToken(username, userDto.getPassword()));
-            UserEntity userEntity = userService.findByUsername(username);
+            UsernamePasswordAuthenticationToken authenticationWithToken =
+                    new UsernamePasswordAuthenticationToken( userDto.getName(), userDto.getPassword(), null );
+            Authentication authentication = authenticationManagerBean.authenticate( authenticationWithToken );
+
+            UserEntity userEntity = userService.findByUsername(userDto.getName());
+            //authenticationManagerBean.authenticate(new UsernamePasswordAuthenticationToken(userEntity.getUsername(), userEntity.getPassword()));
+
             if (userEntity == null) {
-                throw new UsernameNotFoundException("User with username: " + username + " not found");
+                throw new UsernameNotFoundException("User with username: " + userDto.getName() + " not found");
             }
-            String token = jwtTokenProvider.createToken(username, userEntity.getRoles());
+            String token = jwtTokenProvider.createToken(userDto.getName(), userEntity.getRoles());
            Map<Object, Object> response = new HashMap<>();
-           response.put("username", username);
+           response.put("name", userDto.getName());
            response.put("token", token);
+           response.put("id", userEntity.getId());
+           response.put("isAdmin", providerService.isAdmin(userEntity.getRoles()));
 
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
@@ -61,8 +67,23 @@ public class AuthenticationController {
     }
 
     @PostMapping("register/provider")
-    public ResponseEntity registerProvider(@RequestBody ProviderDto providerDto) {
+    public ResponseEntity registerProvider(@RequestBody ProviderDto providerDto) throws Exception {
         return  ResponseEntity.ok(ProviderMapper.MAPPER.toDto(providerService.register(ProviderMapper.MAPPER.toEntity(providerDto))));
+    }
+
+    @PostMapping("login/provider")
+    public ResponseEntity loginProvider(@RequestBody ProviderDto providerDto) {
+        return  ResponseEntity.ok(ProviderMapper.MAPPER.toDto(providerService.login(ProviderMapper.MAPPER.toEntity(providerDto))));
+    }
+
+    @GetMapping("users")
+    public List<UserAndProvidersDto> registerProvider() {
+        return  providerService.getAllUsers();
+    }
+
+    @DeleteMapping("users/{id}")
+    public void deleteProvider(@PathVariable("id") Long id) {
+        providerService.delete(id);
     }
 
 
