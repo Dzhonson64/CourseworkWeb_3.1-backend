@@ -66,7 +66,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(String.valueOf(HttpMethod.POST), "/login", "register/**").permitAll()
-                .antMatchers(String.valueOf(HttpMethod.DELETE), "auth/users/*").hasRole("ADMIN")
                 .antMatchers("/v3/api-docs/**",
                         "/configuration/ui",
                         "/swagger-resources/**",
@@ -75,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/webjars/**",
                         "/actuator/**", "/auth/login/**", "/auth/register/**", "/user/**", "/order/*/buy",
                         "/order/user/*", "/products/**", "/auth/login/provider", "/order/product", "/auth/users", "/order/all/*",
-                        "/order/sales/*").permitAll()
+                        "/order/sales/*", "/auth/users/*").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()

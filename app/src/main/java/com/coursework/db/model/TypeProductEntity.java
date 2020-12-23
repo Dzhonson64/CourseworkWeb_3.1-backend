@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.data.annotation.Transient;
 
 import javax.persistence.*;
@@ -27,39 +29,23 @@ public class TypeProductEntity extends BaseEntity {
     @Column(name = "type")
     private CatalogType type;
 
-    @Cascade({
-            org.hibernate.annotations.CascadeType.DELETE,
-            org.hibernate.annotations.CascadeType.MERGE,
-            org.hibernate.annotations.CascadeType.REFRESH,
-            org.hibernate.annotations.CascadeType.REPLICATE,
-            org.hibernate.annotations.CascadeType.REMOVE,
-            org.hibernate.annotations.CascadeType.DETACH
-    })
-    @OneToMany(mappedBy = "typeProduct",  orphanRemoval = true)
+
+    @OneToMany(mappedBy = "typeProduct", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<ProductEntity> productList = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "parent_id", nullable = false)
     private TypeProductEntity parentTypeProduct;
-    @Cascade({
-            org.hibernate.annotations.CascadeType.DELETE,
-            org.hibernate.annotations.CascadeType.MERGE,
-            org.hibernate.annotations.CascadeType.REFRESH,
-            org.hibernate.annotations.CascadeType.REPLICATE,
-            org.hibernate.annotations.CascadeType.REMOVE,
-            org.hibernate.annotations.CascadeType.DETACH
-    })
-    @OneToMany(mappedBy = "parentTypeProduct", fetch = FetchType.EAGER, orphanRemoval = true)
+
+    @OneToMany(mappedBy = "parentTypeProduct", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<TypeProductEntity> typeProductList = new ArrayList<>();
 
-    @Cascade({
 
-            org.hibernate.annotations.CascadeType.REMOVE,
-            org.hibernate.annotations.CascadeType.DELETE,
-            org.hibernate.annotations.CascadeType.DETACH
-    })
 
-    @OneToMany(mappedBy = "typeProductProperty", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "typeProductProperty", cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<TypePropertyEntity> typePropertyList = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)

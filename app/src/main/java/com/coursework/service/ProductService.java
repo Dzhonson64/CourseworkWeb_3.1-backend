@@ -59,10 +59,15 @@ public class ProductService {
 //
         for (int i = 0; i < catalogChildrenDto.size(); i++) {
             TypeProductEntity entity = parent.getTypeProductList().get(i);
+            if (entity.getStatus() == StatusActiveType.UNABLE) {
+                entity.setParentTypeProduct(null);
+            }
             entity.setParentTypeProduct(parent);
-            saveChildren(entity, entity.getTypeProductList());
 
+            saveChildren(entity, entity.getTypeProductList());
+            //typeProductRepo.save(entity);
         }
+
         return true;
     }
 
@@ -151,14 +156,14 @@ typeProductRepo.findAll();
         }
         return typeProductList;
     }
-
+@Transactional
     private void delete() {
-        List<TypeProductEntity> typeProductEntities = typeProductRepo.findAllByStatus(StatusActiveType.UNABLE);
-        for (TypeProductEntity typeProductEntity : typeProductEntities) {
-            propertyProductRepo.deleteAll(propertyProductRepo.getPropertyListByCatalog(typeProductEntity.getId()));
-        }
-        typeProductRepo.deleteAll(typeProductEntities);
-
+//        List<TypeProductEntity> typeProductEntities = typeProductRepo.findAllByStatus(StatusActiveType.UNABLE);
+//        for (TypeProductEntity typeProductEntity : typeProductEntities) {
+//            propertyProductRepo.deleteAll(propertyProductRepo.getPropertyListByCatalog(typeProductEntity.getId()));
+//        }
+//        typeProductRepo.deleteAll(typeProductEntities);
+        typeProductRepo.deleteUnable();
     }
 
     @Transactional

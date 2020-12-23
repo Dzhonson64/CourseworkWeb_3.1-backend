@@ -16,7 +16,7 @@ public interface TypeProductRepo extends JpaRepository<TypeProductEntity, Long> 
     List<TypeProductEntity> findAllByTypeAndStatus(CatalogType type, StatusActiveType status);
     List<TypeProductEntity> findAllByStatus(StatusActiveType status);
     List<TypeProductEntity> findAllByTypeProductList(List<TypeProductEntity> list);
-
-    @Query(value = "DELETE FROM public.type_product t WHERE t.status = 'UNABLE'", nativeQuery = true)
-    List<TypeProductEntity> deleteUnable();
+    @Modifying
+    @Query(value = " DELETE FROM public.type_product t WHERE t.status = 'UNABLE' ", nativeQuery = true)
+   int deleteUnable();
 }
