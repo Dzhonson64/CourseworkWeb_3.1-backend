@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class TypePropertyEntity extends BaseEntity {
 
     @ManyToOne
-    @JoinColumn(name = "type_id", nullable = false)
+    @JoinColumn(name = "type_id")
     TypeProductEntity typeProductProperty;
 
     @ManyToOne

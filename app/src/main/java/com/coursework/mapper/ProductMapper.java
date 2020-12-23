@@ -40,6 +40,8 @@ public interface ProductMapper {
 
     ProductEntity toProductEntity(ProductDto source);
     List<ProductEntity> toProductListEntity(List<ProductDto> source);
+
+    @Mapping(target = "catalogId", source = "source.typeProduct.id")
     ProductDto toProductDto(ProductEntity source);
     List<ProductDto> toProductListDto(List<ProductEntity> source);
 

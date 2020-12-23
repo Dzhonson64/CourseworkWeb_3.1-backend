@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class WaybillEntity extends BaseEntity {
 
-    @Column(name = "name")
+    @Column(name = "amount")
     Integer amount;
 
     @Column(name = "date_arrive")

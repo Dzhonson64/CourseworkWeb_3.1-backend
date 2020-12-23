@@ -7,9 +7,12 @@ import com.coursework.web.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @Tag(name = "Product", description = "")
@@ -23,6 +26,15 @@ public class ProductController {
     @PostMapping("")
     @ResponseBody
     public ProductDto saveProduct(@RequestBody ProductDto productDto){
+        if (Objects.isNull(productDto.getId()) &&
+         Objects.isNull(productDto.getPrice()) &&
+         Objects.isNull(productDto.getCatalogId()) &&
+         Objects.isNull(productDto.getImage()) &&
+        productDto.getDescription().isEmpty() &&
+        productDto.getName().isEmpty()
+        ) {
+            return productDto;
+        }
         return productService.saveProduct(productDto);
     }
 
@@ -106,18 +118,36 @@ public class ProductController {
         return productService.deleteProduct(id);
     }
 
-    @Operation(summary = "Удаление свойств товаров")
+    @Operation(summary = "Получение всех товаров по id")
     @GetMapping("{id}/properties")
     @ResponseBody
     public List<FillProperty>  getAllPropertyByProduct(@PathVariable("id") Long id){
         return productService.getAllPropertyProductByProduct(id);
     }
 
-    @Operation(summary = "Удаление свойств товаров")
+    @Operation(summary = "Получение товара по id товаров")
     @GetMapping("{id}")
     @ResponseBody
     public ProductDto getProductById(@PathVariable("id") Long id){
         return productService.getProductById(id);
     }
 
+    @Operation(summary = "Получение всех продуктов каталога")
+    @GetMapping("catalog/{id}")
+    @ResponseBody
+    public List<ProductDto> getAllProductsByCatalog(@PathVariable("id") Long id){
+        return productService.getAllProductsByCatalog(id);
+    }
+
+    @PostMapping("{id}/image")
+    @ResponseBody
+    public ProductDto changeImageProject(@PathVariable("id") Long id, @RequestParam("image") MultipartFile form) {
+        return productService.changePhotoProject(id, form);
+    }
+
+    @GetMapping("/{id}/image")
+    @ResponseBody
+    public Resource getImgProject(@PathVariable("id") Long projectId) {
+        return productService.getImg(projectId);
+    }
 }

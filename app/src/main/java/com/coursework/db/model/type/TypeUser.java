@@ -7,9 +7,9 @@ import lombok.Setter;
 
 @Getter
 @RequiredArgsConstructor
-public enum TypeAddress {
-    User ("User"),
-    Provider ("Provider");
+public enum TypeUser {
+    User ("Пользователь"),
+    Provider ("Поставщик");
 
     @NonNull
     private final String value;

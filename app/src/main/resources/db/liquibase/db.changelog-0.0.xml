@@ -16,7 +16,7 @@
             <column name="google_id" type="VARCHAR(255)" />
             <column name="username" type="VARCHAR(255)"/>
             <column name="enabled" type="BOOLEAN"/>
-            <column name="status" type="VARCHAR(255)"/>
+            <column name="status" type="VARCHAR(255)"  defaultValue="ACTIVE"/>
             <column  name="snils" type="VARCHAR(255)" />
             <column  name="surname" type="VARCHAR(255)" />
             <column  name="name" type="VARCHAR(255)" />
@@ -27,33 +27,26 @@
             <column  name="address_id" type="BIGINT" >
                 <constraints unique="true"/>
             </column>
-            <column  name="role_id" type="BIGINT" />
             <column  name="phone" type="VARCHAR(255)" />
             <column  name="postcode" type="VARCHAR(255)" />
             <column  name="money" type="money" />
 
-            <column name="user_role_id" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
 
-            <column name="password_id" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
+            <column name="password" type="VARCHAR(255)" />
         </createTable>
 
-        <createTable tableName="password">
-            <column name="id" type="serial">
-                <constraints primaryKey="true" primaryKeyName="password_pk"/>
-            </column>
-            <column name="password" type="VARCHAR(255)"/>
-        </createTable>
 
-        <createTable tableName="user_roles">
+        <createTable tableName="role">
             <column name="id" type="serial">
                 <constraints primaryKey="true" primaryKeyName="user_role_pk"/>
             </column>
             <column name="name" type="VARCHAR(255)"/>
-            <column name="role" type="VARCHAR(255)"/>
+
+        </createTable>
+
+        <createTable tableName="user_roles">
+            <column name="user_id" type="BIGINT"/>
+            <column name="role_id" type="BIGINT"/>
 
         </createTable>
 
@@ -76,9 +69,11 @@
             <column name="city" type="VARCHAR(255)"/>
             <column name="country" type="VARCHAR(255)"/>
             <column name="street" type="VARCHAR(255)"/>
-            <column name="home" type="VARCHAR(255)"/>
             <column name="apartment" type="VARCHAR(255)"/>
             <column name="type" type="VARCHAR(255)"/>
+            <column name="region" type="VARCHAR(255)"/>
+            <column name="district" type="VARCHAR(255)"/>
+            <column name="building" type="VARCHAR(255)"/>
         </createTable>
 
         <createTable tableName="feedback">
@@ -98,13 +93,11 @@
             </column>
         </createTable>
 
-        <createTable tableName="order">
+        <createTable tableName="orders">
             <column name="id" type="serial">
                 <constraints primaryKey="true" primaryKeyName="order_pk"/>
             </column>
-            <column name="user_id" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
+            <column name="user_id" type="BIGINT" />
             <column name="status" type="VARCHAR(255)" />
             <column name="amount" type="INT" />
             <column name="date_time" type="TIMESTAMP" />
@@ -124,7 +117,7 @@
                 <constraints unique="true"/>
             </column>
             <column name="price" type="money" />
-            <column name="image" type="bytea" />
+            <column name="image" type="varchar(255)" />
             <column name="description" type="TEXT" />
         </createTable>
 
@@ -149,6 +142,7 @@
             <column name="phone" type="VARCHAR(255)" />
             <column name="start_date" type="DATE" />
             <column name="image_logo" type="BYTEA" />
+            <column name="password" type="VARCHAR(255)" />
         </createTable>
 
         <createTable tableName="discount">
@@ -216,12 +210,21 @@
             <column name="amount" type="INT" />
         </createTable>
 
-        <addForeignKeyConstraint baseColumnNames="user_role_id"
-                                 baseTableName="usr"
+        <addForeignKeyConstraint baseColumnNames="role_id"
+                                 baseTableName="user_roles"
                                  onDelete="CASCADE"
                                  onUpdate="RESTRICT"
                                  referencedColumnNames="id"
-                                 referencedTableName="user_roles"
+                                 referencedTableName="role"
+                                 constraintName="fk_role_roles__user"
+        />
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="user_roles"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="usr"
                                  constraintName="fk_user_roles__user"
         />
 
@@ -234,18 +237,11 @@
                                  constraintName="fk_address__users"
         />
 
-        <addForeignKeyConstraint baseColumnNames="password_id"
-                                 baseTableName="usr"
-                                 onDelete="CASCADE"
-                                 onUpdate="CASCADE"
-                                 referencedColumnNames="id"
-                                 referencedTableName="password"
-                                 constraintName="fk_password__users"
-        />
+
 
 
         <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="order"
+                                 baseTableName="orders"
                                  onDelete="SET NULL"
                                  onUpdate="CASCADE"
                                  referencedColumnNames="id"
@@ -258,7 +254,7 @@
                                  onDelete="SET NULL"
                                  onUpdate="CASCADE"
                                  referencedColumnNames="id"
-                                 referencedTableName="order"
+                                 referencedTableName="orders"
                                  constraintName="fk_order__order_product"
         />
 
@@ -397,6 +393,31 @@
     </changeSet>
 
 
+
+    <changeSet author="kirillchug" id="19.12.2020-2">
+        <insert tableName="role">
+            <column name="name" value="ROLE_USER"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="ROLE_ADMIN"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="ROLE_PROVIDER"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="kirillchug" id="22.12.2020">
+        <addColumn tableName="usr">
+            <column name="birthday"  type="DATE"/>
+            <column name="male"  type="VARCHAR(255)"/>
+        </addColumn>
+
+    </changeSet>
+    <changeSet author="kirillchug" id="23.12.2020">
+        <addColumn tableName="usr">
+            <column name="email"  type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>
 

@@ -11,15 +11,12 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "user_roles")
+@Table(name = "role")
 @NoArgsConstructor
 public class RoleEntity extends BaseEntity {
     @Column(name = "name")
     String name;
 
-    @Column(name = "role")
-    String role;
-
-    @OneToMany(mappedBy = "role", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
     List<UserEntity> userList;
 }

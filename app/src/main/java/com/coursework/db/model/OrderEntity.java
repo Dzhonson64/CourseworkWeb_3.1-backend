@@ -1,6 +1,7 @@
 package com.coursework.db.model;
 
 import com.coursework.db.model.base.BaseEntity;
+import com.coursework.db.model.type.Status;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,15 +15,16 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 @NoArgsConstructor
 public class OrderEntity extends BaseEntity {
 
     @Column(name = "date_time")
     LocalDateTime localDateTime;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    String status;
+    Status status;
 
     @Column(name = "amount")
     Integer amount;
@@ -33,7 +35,6 @@ public class OrderEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     UserEntity user;
-
 
 
 }

@@ -2,15 +2,21 @@ package com.coursework.db.model;
 
 
 import com.coursework.db.model.base.BaseEntity;
+import com.coursework.db.model.type.GenderType;
+import com.coursework.db.model.type.Status;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -18,7 +24,7 @@ import java.util.List;
 @Entity
 @Table(name = "usr")
 @NoArgsConstructor
-public class UserEntity extends BaseEntity{
+public class UserEntity extends BaseEntity {
     @Column(name = "google_id")
     String googleId;
 
@@ -28,8 +34,9 @@ public class UserEntity extends BaseEntity{
     @Column(name = "enabled")
     Boolean enabled;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    String status;
+    Status status;
 
     @Column(name = "snils")
     String snils;
@@ -48,22 +55,41 @@ public class UserEntity extends BaseEntity{
 
     @Column(name = "postcode")
     String postcode;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "male")
+    GenderType male;
+
+    @Column(name = "birthday")
+    LocalDate birthday;
 
 
     @Column(name = "money")
     BigDecimal money;
 
-    @ManyToOne
-    @JoinColumn(name = "user_role_id", nullable = false)
-    RoleEntity role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = {
+                    @JoinColumn(name = "user_id", referencedColumnName = "id")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "role_id", referencedColumnName = "id")
+            }
+    )
+
+    private List<RoleEntity> roles;
+
+    @Column(name = "password")
+    String password;
+
+    @Column(name = "email")
+    String email;
 
     @ManyToOne
     @JoinColumn(name = "address_id")
     AddressEntity address;
 
-    @ManyToOne
-    @JoinColumn(name = "password_id", nullable = false)
-    PasswordEntity password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REFRESH, orphanRemoval = true)
     List<OrderEntity> orderList = new ArrayList<>();

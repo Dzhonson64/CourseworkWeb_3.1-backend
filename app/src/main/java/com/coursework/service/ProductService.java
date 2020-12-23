@@ -1,23 +1,26 @@
 package com.coursework.service;
 
-import com.coursework.db.model.ProductEntity;
-import com.coursework.db.model.ProductPropertyEntity;
-import com.coursework.db.model.PropertyProductEntity;
-import com.coursework.db.model.TypeProductEntity;
-import com.coursework.db.repository.ProductPropertyRepo;
-import com.coursework.db.repository.ProductRepo;
-import com.coursework.db.repository.PropertyProductRepo;
-import com.coursework.db.repository.TypeProductRepo;
+import com.coursework.db.model.*;
+import com.coursework.db.repository.*;
+import com.coursework.exceptions.EntityException;
+import com.coursework.exceptions.helper.ErrorCode;
 import com.coursework.mapper.ProductMapper;
 import com.coursework.mapper.ProductPropertyMapper;
+import com.coursework.storage.service.StorageException;
+import com.coursework.storage.service.StorageFileNotFoundException;
+import com.coursework.storage.service.StorageService;
 import com.coursework.web.dto.*;
 import com.coursework.web.dto.type.CatalogType;
 import com.coursework.web.dto.type.StatusActiveType;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -27,7 +30,10 @@ public class ProductService {
     private final ProductRepo productRepo;
     private final TypeProductRepo typeProductRepo;
     private final ProductPropertyRepo productPropertyRepo;
+    private final ProviderRepo providerRepo;
     private final PropertyProductRepo propertyProductRepo;
+    private final StorageService storageService;
+    private final WayBillRepo wayBillRepo;
 
     @Transactional
     public boolean saveCatalogList(List<CatalogDto> catalogDto) {
@@ -53,10 +59,15 @@ public class ProductService {
 //
         for (int i = 0; i < catalogChildrenDto.size(); i++) {
             TypeProductEntity entity = parent.getTypeProductList().get(i);
+            if (entity.getStatus() == StatusActiveType.UNABLE) {
+                entity.setParentTypeProduct(null);
+            }
             entity.setParentTypeProduct(parent);
-            saveChildren(entity, entity.getTypeProductList());
 
+            saveChildren(entity, entity.getTypeProductList());
+            //typeProductRepo.save(entity);
         }
+
         return true;
     }
 
@@ -76,6 +87,9 @@ public class ProductService {
 
     public ProductDto saveProduct(ProductDto productDto) {
         typeProductRepo.findAll();
+        ProviderEntity providerEntity = providerRepo.findById(productDto.getProviderId()).orElse(null);
+        WaybillEntity waybillEntity = new WaybillEntity();
+
         ProductEntity productEntity;
         if (Objects.isNull(productDto.getId())) {
             productEntity = ProductMapper.MAPPER.toProductEntity(productDto);
@@ -83,8 +97,13 @@ public class ProductService {
         }else{
             productEntity = productRepo.findById(productDto.getId()).get();
         }
-
-        return ProductMapper.MAPPER.toProductDto(productRepo.save(productEntity));
+        waybillEntity.setProduct(productEntity);
+        waybillEntity.setProvider(providerEntity);
+        waybillEntity.setDateArrive(LocalDate.now());
+        providerRepo.save(providerEntity);
+        ProductDto productDto2 = ProductMapper.MAPPER.toProductDto(productRepo.save(productEntity));
+        wayBillRepo.save(waybillEntity);
+        return productDto2;
     }
 
     public List<ProductDto> getProductList() {
@@ -137,14 +156,14 @@ typeProductRepo.findAll();
         }
         return typeProductList;
     }
-
+@Transactional
     private void delete() {
-        List<TypeProductEntity> typeProductEntities = typeProductRepo.findAllByStatus(StatusActiveType.UNABLE);
-        for (TypeProductEntity typeProductEntity : typeProductEntities) {
-            propertyProductRepo.deleteAll(propertyProductRepo.getPropertyListByCatalog(typeProductEntity.getId()));
-        }
-        typeProductRepo.deleteAll(typeProductEntities);
-
+//        List<TypeProductEntity> typeProductEntities = typeProductRepo.findAllByStatus(StatusActiveType.UNABLE);
+//        for (TypeProductEntity typeProductEntity : typeProductEntities) {
+//            propertyProductRepo.deleteAll(propertyProductRepo.getPropertyListByCatalog(typeProductEntity.getId()));
+//        }
+//        typeProductRepo.deleteAll(typeProductEntities);
+        typeProductRepo.deleteUnable();
     }
 
     @Transactional
@@ -181,6 +200,58 @@ typeProductRepo.findAll();
         }
         return fillProperties;
     }
+
+    public List<ProductDto> getAllProductsByCatalog(Long catalogId) {
+        typeProductRepo.findAll();
+        TypeProductEntity typeProductEntity = typeProductRepo.findById(catalogId).get();
+        return ProductMapper.MAPPER.toProductListDto(typeProductEntity.getProductList());
+
+    }
+
+
+    public ProductDto changePhotoProject(Long id, MultipartFile file) {
+        ProductEntity projectEntity = productRepo.findById(id).orElseThrow(() -> new EntityException(ErrorCode.COMMON_OBJECT_NOT_EXISTS.toString(), "not found entity"));
+        if (projectEntity.getImage() != null) {
+            deleteImg(projectEntity.getImage());
+        }
+
+
+        String uuidOriginalFilename = getUUIDOriginalFilename(file);
+        storageService.store(file, uuidOriginalFilename);
+        projectEntity.setImage(uuidOriginalFilename);
+
+        return ProductMapper.MAPPER.toProductDto(productRepo.save(projectEntity));
+    }
+
+    public Resource getImg(Long id) {
+        ProductEntity productEntity = productRepo.findById(id).orElseThrow(() -> new EntityException(ErrorCode.COMMON_OBJECT_NOT_EXISTS.toString(), "not found entity"));
+        Resource resource = null;
+        try {
+
+        } catch (StorageException e) {
+            throw new StorageFileNotFoundException("file not found");
+        }
+        return storageService.loadAsResource(productEntity.getImage());
+    }
+
+    private void deleteImg(String imageFileName) {
+        Resource oldImageProject = storageService.loadAsResource(imageFileName);
+        try {
+            oldImageProject.getFile().delete();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String getUUIDOriginalFilename(MultipartFile file) {
+        int beginIndExpansion = Objects.requireNonNull(file.getOriginalFilename()).lastIndexOf(".");
+        String fileNewName = UUID.randomUUID().toString();
+        String fileName = file.getOriginalFilename().substring(0, beginIndExpansion);
+        return file.getOriginalFilename().replace(fileName, fileNewName);
+    }
+
+
+
 
 
 }
