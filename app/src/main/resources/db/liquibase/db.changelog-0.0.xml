@@ -390,6 +390,8 @@
                                  constraintName="fk_property__type_property"
         />
 
+
+
     </changeSet>
 
 
@@ -418,6 +420,39 @@
             <column name="email"  type="VARCHAR(255)"/>
         </addColumn>
     </changeSet>
+
+    <changeSet author="kirillchug" id="23.12.2020">
+        <addColumn tableName="usr">
+            <column name="email"  type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="kirillchug" id="23.12.2020 2">
+        <addColumn tableName="type_product">
+            <column name="date"  type="DATE"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="kirillchug" id="24.12.2020">
+        <addForeignKeyConstraint baseColumnNames="type_id"
+                                 baseTableName="type_property"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 referencedColumnNames="id"
+                                 referencedTableName="type_product"
+                                 constraintName="fk_type_product__type_property"
+        />
+    </changeSet>
+
+    <changeSet author="kirillchug" id="24.12.2020 2">   
+        <dropColumn tableName="product_property">
+            <column name="value"  type="REAL"/>
+        </dropColumn>
+        <addColumn tableName="product_property">
+            <column  name="value"  type="VARCHAR(255)" />
+        </addColumn>
+    </changeSet>
+
 
 </databaseChangeLog>
 

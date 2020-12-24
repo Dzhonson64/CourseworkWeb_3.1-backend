@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class ProductPropertyEntity extends BaseEntity {
 
     @Column(name = "value")
-    Double value;
+    String value;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)

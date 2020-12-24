@@ -76,7 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/order/user/*", "/products/**", "/auth/login/provider", "/order/product", "/auth/users", "/order/all/*",
                         "/order/sales/*", "/auth/users/*").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
+                //.anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));
     }

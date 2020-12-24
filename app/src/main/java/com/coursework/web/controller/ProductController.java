@@ -150,4 +150,10 @@ public class ProductController {
     public Resource getImgProject(@PathVariable("id") Long projectId) {
         return productService.getImg(projectId);
     }
+
+    @GetMapping("/last-products")
+    @ResponseBody
+    public List<ProductDto> getLastProducts() {
+        return ProductMapper.MAPPER.toProductListDto(productService.getLastProducts());
+    }
 }
