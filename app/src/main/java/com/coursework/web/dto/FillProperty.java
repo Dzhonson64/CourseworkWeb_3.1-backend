@@ -8,7 +8,7 @@ import lombok.Setter;
 public class FillProperty {
     Long propertyId;
     Long productPropertyId;
-    Double value;
+    String value;
     String unit;
     String name;
 }

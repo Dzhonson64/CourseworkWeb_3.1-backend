@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 @Schema(name = "Значение свойств товаров", description = "")
 public class ProductPropertyDto {
     Long id;
-    Double value;
+    String value;
     Long productId;
     Long propertyId;
     Long productPropertyId;

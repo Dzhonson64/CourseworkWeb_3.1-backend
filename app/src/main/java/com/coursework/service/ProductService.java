@@ -252,6 +252,16 @@ typeProductRepo.findAll();
 
 
 
+    public List<ProductEntity> getLastProducts(){
+       List<WaybillEntity> waybillEntities = wayBillRepo.findAll().stream()
+               .sorted((o1, o2) -> o2.getDateArrive().compareTo(o1.getDateArrive()))
+               .limit(5)
+               .collect(Collectors.toList());
+        return waybillEntities.stream()
+                .map(WaybillEntity::getProduct)
+                .collect(Collectors.toList());
+    }
+
 
 
 }

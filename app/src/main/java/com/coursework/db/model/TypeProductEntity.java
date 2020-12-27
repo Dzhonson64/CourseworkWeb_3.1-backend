@@ -13,6 +13,7 @@ import org.springframework.data.annotation.Transient;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -35,17 +36,16 @@ public class TypeProductEntity extends BaseEntity {
     private List<ProductEntity> productList = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "parent_id", nullable = false)
+    @JoinColumn(name = "parent_id")
     private TypeProductEntity parentTypeProduct;
 
     @OneToMany(mappedBy = "parentTypeProduct", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    @LazyCollection(LazyCollectionOption.FALSE)
     private List<TypeProductEntity> typeProductList = new ArrayList<>();
 
-
+    @Column(name = "date")
+    private Date date;
 
     @OneToMany(mappedBy = "typeProductProperty", cascade = CascadeType.ALL)
-    @LazyCollection(LazyCollectionOption.FALSE)
     private List<TypePropertyEntity> typePropertyList = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
